@@ -1,0 +1,48 @@
+<apex:page controller="AuthenticationFlows" showHeader="true" sidebar="true">
+    <apex:includeScript value="https://code.jquery.com/jquery-1.12.4.min.js"/>
+
+    <apex:sectionHeader title="Authentication" subtitle="Authentication" />
+
+    <apex:pageBlock id="AuthenticationBlock" title="Authentication">
+        <apex:pageMessages />
+        <apex:pageBlockSection title="MyPageBlockSectionTitle">
+            <apex:pageBlockSectionItem >
+                Server URL : {!SERVER_URL}
+            </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                Session ID : {!SESSION_ID}
+            </apex:pageBlockSectionItem>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:form >
+        <apex:actionFunction name="setParams" action="{!pageaction}" reRender="AuthenticationBlock">
+            <apex:param value="" assignTo="{!strMapParams}" name="params"/>
+        </apex:actionFunction>
+    </apex:form>
+
+    <script>
+        $( document ).ready(function() {
+            var search = window.location.search;
+            var searchParams = search.substr(1).split('&');
+            var params = {};
+            for (var i in searchParams) {
+                var parameter = searchParams[i].split('=');
+                if (parameter[0].length) {
+                    params[parameter[0]] = decodeURIComponent(parameter[1]);
+                }
+            }
+            var hash = window.location.hash;
+            var hashParams = hash.substr(1).split('&');
+            for (var i in hashParams) {
+                var parameter = hashParams[i].split('=');
+                if (parameter[0].length) {
+                    params[parameter[0]] = decodeURIComponent(parameter[1]);
+                }
+            }
+            console.log('params = ', params);
+            // debugger;
+            setParams(JSON.stringify(params));
+
+        });
+    </script>
+</apex:page>
